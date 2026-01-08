@@ -88,4 +88,36 @@ public class AuthController {
       return ResponseEntity.badRequest().body(Map.of("message", e.getMessage()));
     }
   }
+
+  @PostMapping("/login")
+  public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    Authentication authentication = authenticationManager.authenticate(
+        new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
+
+    SecurityContextHolder.getContext().setAuthentication(authentication);
+
+    Optional<User> optionalUser = userRepository.findByEmail(request.getEmail());
+
+    if (optionalUser.isPresent()) {
+      User user = optionalUser.get();
+
+      if (!user.isActivated()) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+            .body("Account is not verified. Please check your email for the activation link.");
+      }
+
+      UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+      String accessToken = jwtUtil.generateToken(userDetails, (long) 5 * 60 * 1000); // 5 min
+      return ResponseEntity.ok(new LoginResponse(
+          accessToken,
+          user.getEmail(),
+          user.getFirstname(),
+          user.getLastname(),
+          user.getAddress(),
+          user.getPhonenumber(),
+          user.getRole()));
+    } else {
+      return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("User not found after successful authentication.");
+    }
+  }
 }
