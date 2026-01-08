@@ -1,0 +1,15 @@
+<section class="hero-container">
+  <div class="hero-content">
+    <h1>Taxi Service App</h1>
+    <p>Get where you want to go at a click of a button. Fast and convenient.</p>
+
+    <div class="button-container">
+      <app-button label="Login" (clicked)="onNavigation('/login')"></app-button>
+      <span class="divider">or</span>
+      <app-button
+        label="Register"
+        (clicked)="onNavigation('/register')"
+      ></app-button>
+    </div>
+  </div>
+</section>
