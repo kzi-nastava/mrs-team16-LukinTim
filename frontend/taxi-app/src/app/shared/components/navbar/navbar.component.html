@@ -1,0 +1,21 @@
+<div class="navbar-container">
+  <div class="title">Taxi system</div>
+  <div class="button-container">
+    <app-nav-button
+      label="Create Ride"
+      (clicked)="onNavigation('/rides')"
+    ></app-nav-button>
+    <app-nav-button
+      label="Rides"
+      (clicked)="onNavigation('/rides/create')"
+    ></app-nav-button>
+    <app-nav-button
+      label="Profile"
+      (clicked)="onNavigation('/profile')"
+    ></app-nav-button>
+    <app-nav-button
+      label="Logout"
+      (clicked)="onNavigation('')"
+    ></app-nav-button>
+  </div>
+</div>
